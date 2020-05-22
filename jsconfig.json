@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@root/*": ["./*"],
+      "@app/*": ["./src/app/*"],
+      "@libs/*": ["./src/libs/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@controllers/*": ["./src/app/controllers/*"],
+      "@middlewares/*": ["./src/app/middlewares/*"],
+      "@exceptions/*": ["./src/app/exceptions/*"]
+    }
+  }
+}
