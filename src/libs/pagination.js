@@ -15,6 +15,8 @@ function formatQuery(query) {
   if (query.page < this.defaultPaginationOptions.page)
     query.page = this.defaultPaginationOptions.page;
 
+  if (query.limit > this.defaultPaginationOptions.maxLimit)
+    query.limit = this.defaultPaginationOptions.maxLimit;
   return query;
 }
 
@@ -132,6 +134,7 @@ class Pagination {
   defaultPaginationOptions = {
     limit: 10,
     page: 1,
+    maxLimit: 100,
   };
 
   constructor(model) {
