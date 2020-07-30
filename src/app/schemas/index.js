@@ -16,4 +16,19 @@ module.exports = [
       name: Joi.string().min(3).required(),
     }),
   },
+  {
+    key: "store-order",
+    schema: Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().email(),
+      phone: Joi.number().required(),
+      address: Joi.string().required(),
+      items: Joi.array().items(
+        Joi.object({
+          prd_id: Joi.string().required(),
+          qty: Joi.number().required(),
+        })
+      ),
+    }),
+  },
 ];
