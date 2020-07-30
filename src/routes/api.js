@@ -1,5 +1,6 @@
 // module.exports = require("./apis");
 const config = require("config");
+const { required } = require("@hapi/joi");
 
 const routers = [
   {
@@ -20,6 +21,7 @@ const routers = [
   },
   ...require("./apis/products"),
   ...require("./apis/category"),
+  ...require("./apis/order"),
 ];
 
 module.exports = routers;

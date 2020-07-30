@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const { CatchAsync, renderHtml, formatPrice } = require("@libs/utils");
 const _ = require("lodash");
 const transporter = require("@libs/mail");
@@ -37,7 +38,7 @@ exports.order = CatchAsync(async (req, res) => {
 
   await new OrderModel(order).save();
 
-  const html = await renderHtml(req, "email", {
+  const html = await renderHtml(req, "mail", {
     products,
     cart: body.items,
     name: body.name,
@@ -51,7 +52,7 @@ exports.order = CatchAsync(async (req, res) => {
 
   await transporter.sendMail({
     from: '"Vietpro Shop" <mail@gmail.com>',
-    to: email,
+    to: body.email,
     subject: "Thong tin don hang",
     html: html,
   });
