@@ -11,8 +11,11 @@ exports.order = CatchAsync(async (req, res) => {
   const body = req.body;
 
   const idsPrd = body.items.map((item) => item.prd_id);
+  console.log("exports.order -> body.items", body.items);
+  console.log("exports.order -> idsPrd", idsPrd);
 
   const products = await ProductModel.find({ _id: { $in: idsPrd } }).lean();
+  console.log("exports.order -> products", products);
 
   const order = {
     fullName: body.name,

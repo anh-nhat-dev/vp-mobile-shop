@@ -106,7 +106,7 @@
         <tr>
           <td colspan="2" style="padding: 15px;">
             <% cart && cart.forEach((item, index) => { %> <% const product =
-            products.find(product => product.id === item.prd_id) %> <% if
+            products.find(product => product._id === item.prd_id) %> <% if
             (product) { %>
             <p
               style="
