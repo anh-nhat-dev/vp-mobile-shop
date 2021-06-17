@@ -17,14 +17,14 @@ exports.index = CatchAsync(async (req, res) => {
   }
   const pagination = new Pagination(Product);
 
-  // query["select"] = {
-  //   image: 1,
-  //   price: 1,
-  //   is_stock: 1,
-  //   is_featured: 1,
-  //   name: 1,
-  //   category_id: 1
-  // };
+  query["select"] = {
+    image: 1,
+    price: 1,
+    is_stock: 1,
+    is_featured: 1,
+    name: 1,
+    category_id: 1
+  };
 
   const products = await pagination.paginate(conditions, query);
 

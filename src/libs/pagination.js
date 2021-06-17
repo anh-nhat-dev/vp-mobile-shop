@@ -42,9 +42,9 @@ async function findDocuments(conditions, query) {
   if (populate) {
     mQuery.populate(populate);
   }
-  console.time("docs_");
+  // console.time("docs_");
   const docs = await mQuery.exec();
-  console.timeEnd("docs_");
+  // console.timeEnd("docs_");
 
   return docs;
 }
