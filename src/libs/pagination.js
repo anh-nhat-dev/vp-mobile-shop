@@ -25,13 +25,14 @@ function calculatePositionStartDocument(page, limit) {
 }
 
 async function countDocument(query) {
-  const totalDocument = await this.model.find(query).countDocuments().exec();
+  const totalDocument = await this.model.find(query).count().exec();
   return totalDocument;
 }
 
 async function findDocuments(conditions, query) {
   const { filter, sort, limit, select, page, populate } = query;
   const mQuery = this.model.find({ ...conditions, ...filter });
+
   mQuery.select(select);
   mQuery.sort(sort);
   mQuery.limit(limit);
@@ -41,8 +42,11 @@ async function findDocuments(conditions, query) {
   if (populate) {
     mQuery.populate(populate);
   }
+  console.time("docs_");
+  const docs = await mQuery.exec();
+  console.timeEnd("docs_");
 
-  return await mQuery.exec();
+  return docs;
 }
 
 function calculateTotalPage(totalDocument, limit) {
@@ -58,7 +62,7 @@ function calculatePages(page, totalDocument, limit) {
     next: page < totalPage ? page + 1 : 0,
     prev: page > 1 ? page - 1 : 0,
     hasNext: page < totalPage,
-    hasPrev: page > 1,
+    hasPrev: page > 1
   };
 
   return pages;
@@ -72,9 +76,9 @@ function calculateFilters(query) {
     limit,
     sort,
     select,
-    populate,
+    populate
   };
-  Object.keys(filters).forEach((key) => !filters[key] && delete filters[key]);
+  Object.keys(filters).forEach(key => !filters[key] && delete filters[key]);
   return filters;
 }
 
@@ -84,7 +88,7 @@ function calculateItems(totalDocument, page, limit) {
   const items = {
     total: totalDocument,
     begin: page <= totalPage ? skip + 1 : totalDocument,
-    end: totalDocument > limit * page ? limit * page : totalDocument,
+    end: totalDocument > limit * page ? limit * page : totalDocument
   };
   return items;
 }
@@ -93,7 +97,7 @@ async function countDocumentAggregate(aggregations) {
   const total = await this.model
     .aggregate(aggregations)
     .count("total")
-    .then((result) => {
+    .then(result => {
       if (result && result.length) {
         result = result[0];
         return result.total;
@@ -124,7 +128,7 @@ function formatResult(query, totalDocument, docs) {
     docs,
     items,
     filters,
-    pages,
+    pages
   };
   return results;
 }
@@ -134,7 +138,7 @@ class Pagination {
   defaultPaginationOptions = {
     limit: 10,
     page: 1,
-    maxLimit: 100,
+    maxLimit: 100
   };
 
   constructor(model) {
@@ -146,7 +150,7 @@ class Pagination {
 
     const [totalDocument, docs] = await Promise.allSettled([
       countDocumentAggregate.call(this, aggregations),
-      aggregateDocuments.call(this, aggregations, query),
+      aggregateDocuments.call(this, aggregations, query)
     ]);
 
     return formatResult(query, totalDocument.value, docs.value);
@@ -158,9 +162,8 @@ class Pagination {
     const { filter } = query;
     const [totalDocument, docs] = await Promise.allSettled([
       countDocument.call(this, { ...conditions, ...filter }),
-      findDocuments.call(this, conditions, query),
+      findDocuments.call(this, conditions, query)
     ]);
-
     return formatResult(query, totalDocument.value, docs.value);
   }
 }

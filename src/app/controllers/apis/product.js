@@ -17,11 +17,20 @@ exports.index = CatchAsync(async (req, res) => {
   }
   const pagination = new Pagination(Product);
 
+  // query["select"] = {
+  //   image: 1,
+  //   price: 1,
+  //   is_stock: 1,
+  //   is_featured: 1,
+  //   name: 1,
+  //   category_id: 1
+  // };
+
   const products = await pagination.paginate(conditions, query);
 
   res.status(200).json({
     status: "success",
-    data: products,
+    data: products
   });
 });
 
@@ -30,7 +39,7 @@ exports.show = CatchAsync(async (req, res) => {
   const product = await Product.findById(id);
   res.status(200).json({
     status: "success",
-    data: product,
+    data: product
   });
 });
 
@@ -38,31 +47,30 @@ exports.comments = CatchAsync(async (req, res) => {
   const { id } = req.params;
   const pagination = new Pagination(Comment);
   const conditions = {
-    product_id: id,
+    product_id: id
   };
   const comments = await pagination.paginate(conditions, req.query);
 
   res.status(200).json({
     status: "success",
-    data: comments,
+    data: comments
   });
 });
 
 exports.storeComments = CatchAsync(async (req, res) => {
   const { id } = req.params;
   await Product.findById(id).then(
-    (data) =>
-      !data && Promise.reject(new NotFoundException(`Not found product`))
+    data => !data && Promise.reject(new NotFoundException(`Not found product`))
   );
   await new Comment({
     name: req.body.name,
     email: req.body.email,
     content: req.body.content,
-    product_id: id,
+    product_id: id
   }).save();
 
   res.status(201).json({
     status: "success",
-    message: "Create comment successfully",
+    message: "Create comment successfully"
   });
 });
